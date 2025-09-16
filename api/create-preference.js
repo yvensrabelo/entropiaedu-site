@@ -76,16 +76,16 @@ export default async function handler(req, res) {
           }
         ],
 
-        // URLs de retorno - usando domínio entropiaedu.com
+        // URLs de retorno - usando domínio www.entropiaedu.com (corrigido redirecionamento 307)
         back_urls: {
-          success: 'https://entropiaedu.com/pagamento/sucesso',
-          failure: 'https://entropiaedu.com/pagamento/falha',
-          pending: 'https://entropiaedu.com/pagamento/pendente'
+          success: 'https://www.entropiaedu.com/pagamento/sucesso',
+          failure: 'https://www.entropiaedu.com/pagamento/falha',
+          pending: 'https://www.entropiaedu.com/pagamento/pendente'
         },
         auto_return: 'approved',
 
-        // Webhook - usando versão ULTRA simplificada temporariamente
-        notification_url: 'https://entropiaedu.com/api/webhook-ultra-simple',
+        // Webhook - usando versão ULTRA simplificada com www (corrigido redirecionamento 307)
+        notification_url: 'https://www.entropiaedu.com/api/webhook-ultra-simple',
 
         // Dados do comprador
         payer: {
