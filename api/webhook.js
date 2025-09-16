@@ -194,8 +194,9 @@ export default async function handler(req, res) {
     } catch (apiError) {
       console.error('❌ Erro ao buscar pagamento da API MP:', apiError.message);
       return res.json({
-        success: false,
-        error: 'Erro ao buscar pagamento',
+        success: true,
+        message: 'Erro ao buscar pagamento (webhook processado)',
+        error: apiError.message,
         payment_id: paymentId
       });
     }

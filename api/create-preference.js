@@ -84,8 +84,8 @@ export default async function handler(req, res) {
         },
         auto_return: 'approved',
 
-        // Webhook - TEMPORÁRIO: usando debug para capturar formato
-        notification_url: 'https://entropiaedu.com/api/webhook-debug',
+        // Webhook
+        notification_url: 'https://entropiaedu.com/api/webhook',
 
         // Dados do comprador
         payer: {
