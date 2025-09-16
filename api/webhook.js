@@ -1,6 +1,11 @@
 // Webhook Mercado Pago - Ultra Simplificado para evitar erro 502
+import crypto from 'crypto';
+
 // Cache simples para evitar duplicatas (expira a cada 10 minutos)
 const processedPayments = new Map();
+
+// Secret key do webhook do Mercado Pago
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'ca513e5f9eac768fed186399e467daff52ad6381d8a3b47ab62c9663ca0726c7';
 
 export default async function handler(req, res) {
   // ✅ SEMPRE retorna 200 PRIMEIRO para evitar 502
@@ -12,6 +17,40 @@ export default async function handler(req, res) {
     console.log('Method:', req.method);
     console.log('Query:', JSON.stringify(req.query, null, 2));
     console.log('Body:', JSON.stringify(req.body, null, 2));
+
+    // Validar assinatura do webhook (se fornecida)
+    const xSignature = req.headers['x-signature'];
+    const xRequestId = req.headers['x-request-id'];
+
+    if (xSignature && xRequestId) {
+      console.log('🔐 Validando assinatura do webhook...');
+
+      // Extrair ts e v1 do header x-signature
+      const parts = xSignature.split(',');
+      let ts = '';
+      let v1 = '';
+
+      for (const part of parts) {
+        const [key, value] = part.split('=');
+        if (key === 'ts') ts = value;
+        if (key === 'v1') v1 = value;
+      }
+
+      // Construir string para validar
+      const dataToSign = `id:${req.query?.['data.id'] || req.body?.data?.id};request-id:${xRequestId};ts:${ts};`;
+
+      // Gerar HMAC
+      const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET);
+      hmac.update(dataToSign);
+      const calculatedSignature = hmac.digest('hex');
+
+      if (calculatedSignature !== v1) {
+        console.log('⚠️ Assinatura inválida - mas processando mesmo assim');
+        // Não falhar, apenas logar o aviso
+      } else {
+        console.log('✅ Assinatura válida');
+      }
+    }
 
     // Log de TODOS os IDs possíveis
     console.log('🔍 TODOS OS IDs POSSÍVEIS:', {
