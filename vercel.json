@@ -9,6 +9,15 @@
     },
     "api/webhook.js": {
       "maxDuration": 10
+    },
+    "api/webhook-simple.js": {
+      "maxDuration": 10
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/pagamento/:path*",
+      "destination": "/pagamento/:path*.html"
+    }
+  ]
 }
