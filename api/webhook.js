@@ -90,17 +90,49 @@ export default async function handler(req, res) {
     // Processar notificação
     if (dataID) {
       console.log(`📋 Processando pagamento ID: ${dataID}`);
-      
-      // Aqui você pode:
-      // 1. Buscar detalhes do pagamento na API do Mercado Pago
-      // 2. Atualizar status no seu banco de dados
-      // 3. Enviar email de confirmação
-      // 4. Liberar acesso ao curso
-      
-      // Por enquanto, apenas log
+
+      // Buscar detalhes do pagamento (simulado por enquanto)
+      // Em produção, você deve buscar os detalhes reais do pagamento usando a API do MP
+
+      // Enviar webhook para o sistema externo
+      try {
+        // Extrair dados do external_reference se disponível
+        const externalRef = req.body?.external_reference || '';
+
+        // Preparar dados para o webhook externo
+        const webhookData = {
+          payment_id: dataID,
+          external_reference: externalRef,
+          status: 'approved',
+          timestamp: new Date().toISOString(),
+          // Estes dados viriam da API do MP em produção
+          cpf: req.body?.payer?.identification?.number || '',
+          telefone: req.body?.payer?.phone ?
+            `${req.body.payer.phone.area_code}${req.body.payer.phone.number}` : '',
+          email: req.body?.payer?.email || '',
+          valor: req.body?.transaction_amount || 0
+        };
+
+        // Enviar para o webhook de confirmação de pagamento
+        const webhookResponse = await fetch('https://webhook.cursoentropia.com/webhook/PAGAMENTOSVIR2025', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(webhookData)
+        });
+
+        console.log('✅ Webhook de confirmação enviado:', {
+          status: webhookResponse.status,
+          data: webhookData
+        });
+      } catch (webhookError) {
+        console.error('❌ Erro ao enviar webhook de confirmação:', webhookError);
+      }
+
       console.log('🎉 Pagamento processado com sucesso');
-      
-      // Simular processamento baseado no ID
+
+      // Log do processamento
       const processing = {
         payment_id: dataID,
         processed_at: new Date().toISOString(),
@@ -108,10 +140,11 @@ export default async function handler(req, res) {
         actions: [
           'Log salvo',
           'Notificação processada',
+          'Webhook de confirmação enviado',
           'Status atualizado'
         ]
       };
-      
+
       console.log('Resultado do processamento:', processing);
     }
 

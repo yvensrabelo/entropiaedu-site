@@ -37,7 +37,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { id, title, price, description, buyer_email } = req.body;
+    const { id, title, price, description, buyer_email, buyer_cpf, buyer_phone } = req.body;
 
     // Validar dados
     if (!id || !title || !price) {
@@ -47,9 +47,20 @@ export default async function handler(req, res) {
       });
     }
 
-    console.log('Criando preferência para:', { id, title, price });
+    console.log('Criando preferência para:', { id, title, price, buyer_cpf, buyer_phone });
 
     const preference = new Preference(client);
+
+    // Processar telefone (extrair DDD e número)
+    let area_code = '11';
+    let phone_number = '999999999';
+    if (buyer_phone) {
+      const cleanPhone = buyer_phone.replace(/\D/g, '');
+      if (cleanPhone.length === 11) {
+        area_code = cleanPhone.substring(0, 2);
+        phone_number = cleanPhone.substring(2);
+      }
+    }
 
     const preferenceData = {
       body: {
@@ -64,7 +75,7 @@ export default async function handler(req, res) {
             currency_id: 'BRL'
           }
         ],
-        
+
         // URLs de retorno para entropiaedu.com
         back_urls: {
           success: 'https://entropiaedu.com/pagamento/sucesso',
@@ -72,22 +83,22 @@ export default async function handler(req, res) {
           pending: 'https://entropiaedu.com/pagamento/pendente'
         },
         auto_return: 'approved',
-        
+
         // Webhook
         notification_url: 'https://entropiaedu.com/api/webhook',
-        
+
         // Dados do comprador
         payer: {
           name: 'Cliente',
           surname: 'Entropia Edu',
           email: buyer_email || 'cliente@entropiaedu.com',
           phone: {
-            area_code: '11',
-            number: '999999999'
+            area_code: area_code,
+            number: phone_number
           },
           identification: {
             type: 'CPF',
-            number: '12345678901'
+            number: buyer_cpf || '12345678901'
           },
           address: {
             street_name: 'Rua Principal',

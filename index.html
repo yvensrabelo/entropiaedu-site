@@ -187,6 +187,29 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Produto Especial R$10 -->
+                <div class="col-lg-4 col-md-6 mb-4 mx-auto">
+                    <div class="card feature-card h-100 border-primary">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-star fa-3x text-danger"></i>
+                            </div>
+                            <h5 class="card-title text-center">Curso Especial VIR 2025</h5>
+                            <p class="card-text text-center text-muted">
+                                Acesso exclusivo ao conteúdo VIR 2025
+                            </p>
+                            <div class="price-card">
+                                <h3 class="text-danger fw-bold">R$ 10,00</h3>
+                                <p class="text-muted mb-3">Oferta Limitada</p>
+                                <button class="btn btn-checkout w-100" onclick="comprarCursoComWhatsApp('vir-2025', 'Curso Especial VIR 2025', 10.00)">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Comprar Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -232,13 +255,209 @@
         </div>
     </footer>
 
+    <!-- Modal para coletar WhatsApp -->
+    <div class="modal fade" id="whatsappModal" tabindex="-1" aria-labelledby="whatsappModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="whatsappModalLabel">Complete seus dados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="whatsappForm">
+                        <div class="mb-3">
+                            <label for="cpf" class="form-label">CPF</label>
+                            <input type="text" class="form-control" id="cpf" required
+                                   placeholder="000.000.000-00" maxlength="14">
+                        </div>
+                        <div class="mb-3">
+                            <label for="whatsapp" class="form-label">WhatsApp</label>
+                            <input type="text" class="form-control" id="whatsapp" required
+                                   placeholder="(11) 98765-4321" maxlength="15">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" required
+                                   placeholder="seu@email.com">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="processarCompraComDados()">
+                        <i class="fas fa-check me-2"></i>Continuar para Pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
-    
+
     <script>
         // Inicializar MercadoPago com sua Public Key de PRODUÇÃO
         const mp = new MercadoPago('APP_USR-722124b2-d75f-4a39-8688-fffae5fb1054');
+
+        // Variáveis globais para armazenar dados temporários
+        let cursoSelecionado = null;
+        let dadosComprador = null;
+
+        // Função para formatar CPF
+        function formatarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            if (cpf.length === 11) {
+                return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+            return cpf;
+        }
+
+        // Função para formatar WhatsApp
+        function formatarWhatsApp(tel) {
+            tel = tel.replace(/\D/g, '');
+            if (tel.length === 11) {
+                return tel.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            return tel;
+        }
+
+        // Máscaras de input
+        document.addEventListener('DOMContentLoaded', function() {
+            const cpfInput = document.getElementById('cpf');
+            const whatsappInput = document.getElementById('whatsapp');
+
+            if (cpfInput) {
+                cpfInput.addEventListener('input', function(e) {
+                    e.target.value = formatarCPF(e.target.value);
+                });
+            }
+
+            if (whatsappInput) {
+                whatsappInput.addEventListener('input', function(e) {
+                    e.target.value = formatarWhatsApp(e.target.value);
+                });
+            }
+        });
+
+        // Função para comprar curso com coleta de WhatsApp
+        function comprarCursoComWhatsApp(id, titulo, preco) {
+            cursoSelecionado = { id, titulo, preco };
+            const modal = new bootstrap.Modal(document.getElementById('whatsappModal'));
+            modal.show();
+        }
+
+        // Processar compra com dados coletados
+        async function processarCompraComDados() {
+            const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+            const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
+            const email = document.getElementById('email').value;
+
+            // Validações
+            if (cpf.length !== 11) {
+                alert('CPF inválido!');
+                return;
+            }
+
+            if (whatsapp.length !== 11) {
+                alert('WhatsApp inválido!');
+                return;
+            }
+
+            if (!email || !email.includes('@')) {
+                alert('E-mail inválido!');
+                return;
+            }
+
+            // Fechar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('whatsappModal'));
+            modal.hide();
+
+            // Salvar dados
+            dadosComprador = { cpf, whatsapp, email };
+
+            // Chamar função de compra com dados adicionais
+            await comprarCursoComDados(cursoSelecionado.id, cursoSelecionado.titulo, cursoSelecionado.preco, dadosComprador);
+        }
+
+        // Função modificada para incluir dados do comprador
+        async function comprarCursoComDados(id, titulo, preco, dados) {
+            try {
+                // Mostrar loading
+                const buttons = document.querySelectorAll('.btn-checkout');
+                buttons.forEach(btn => btn.disabled = true);
+
+                console.log('Criando preferência com dados:', { id, titulo, preco, dados });
+
+                // Criar preferência com dados adicionais
+                const response = await fetch('/api/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        title: titulo,
+                        price: preco,
+                        description: `Curso ${titulo} - Entropia Edu`,
+                        buyer_email: dados.email,
+                        buyer_cpf: dados.cpf,
+                        buyer_phone: dados.whatsapp
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Resposta da API:', data);
+
+                if (data.success) {
+                    // Enviar webhook de registro do pedido
+                    await enviarWebhookRegistro({
+                        link_pagamento: data.init_point,
+                        cpf: dados.cpf,
+                        telefone: dados.whatsapp,
+                        email: dados.email,
+                        produto: titulo,
+                        valor: preco,
+                        preference_id: data.preference_id
+                    });
+
+                    // Abrir checkout do Mercado Pago
+                    const checkout = mp.checkout({
+                        preference: {
+                            id: data.preference_id
+                        },
+                        autoOpen: true
+                    });
+                } else {
+                    alert('Erro ao criar preferência: ' + data.error);
+                }
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao processar compra: ' + error.message);
+            } finally {
+                // Reabilitar botões
+                const buttons = document.querySelectorAll('.btn-checkout');
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        // Enviar webhook de registro do pedido
+        async function enviarWebhookRegistro(dados) {
+            try {
+                const response = await fetch('https://webhook.cursoentropia.com/webhook/REGISTRODOPEDIDOVIR2025', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+                console.log('Webhook de registro enviado:', dados);
+            } catch (error) {
+                console.error('Erro ao enviar webhook de registro:', error);
+            }
+        }
 
         async function comprarCurso(id, titulo, preco) {
             try {
