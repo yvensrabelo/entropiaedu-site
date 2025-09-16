@@ -28,7 +28,7 @@
 
 ### Na Vercel:
 ```
-MERCADOPAGO_ACCESS_TOKEN = APP_USR-5258685936517659-091600-6e36353e2b3a1fc71d70b1aaa364ca68-765341328
+MERCADOPAGO_ACCESS_TOKEN = [seu_access_token_aqui]
 MERCADOPAGO_WEBHOOK_SECRET = [sua_webhook_secret]
 ```
 
@@ -38,7 +38,7 @@ MERCADOPAGO_WEBHOOK_SECRET = [sua_webhook_secret]
 cp .env.example .env.local
 
 # Editar com suas credenciais (nunca commit!)
-echo "MERCADOPAGO_ACCESS_TOKEN=APP_USR-5258..." > .env.local
+echo "MERCADOPAGO_ACCESS_TOKEN=SEU_TOKEN_AQUI" > .env.local
 ```
 
 ## 🚨 AÇÃO URGENTE NECESSÁRIA
