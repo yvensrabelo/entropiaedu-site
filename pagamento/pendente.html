@@ -43,5 +43,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Verificar status do pagamento automaticamente
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('payment_id');
+
+        if (paymentId) {
+            console.log('Verificando status do pagamento:', paymentId);
+
+            // Verificar status a cada 3 segundos
+            const checkPayment = async () => {
+                try {
+                    const response = await fetch(`/api/test-payment?id=${paymentId}`);
+                    const data = await response.json();
+
+                    if (data.success && data.payment_info.status === 'approved') {
+                        console.log('Pagamento aprovado! Redirecionando...');
+                        window.location.href = '/pagamento/sucesso';
+                        return;
+                    }
+
+                    console.log('Status atual:', data.payment_info?.status || 'checking...');
+                } catch (error) {
+                    console.log('Erro ao verificar pagamento:', error);
+                }
+
+                // Verificar novamente em 3 segundos
+                setTimeout(checkPayment, 3000);
+            };
+
+            // Começar verificação após 2 segundos
+            setTimeout(checkPayment, 2000);
+        }
+
+        // Auto-redirecionar para home após 5 minutos se não resolver
+        setTimeout(() => {
+            console.log('Timeout - redirecionando para home');
+            window.location.href = '/';
+        }, 300000);
+    </script>
 </body>
 </html>
