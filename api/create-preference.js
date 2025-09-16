@@ -1,8 +1,13 @@
 // API para criar preferências de pagamento - Vercel Serverless Function
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 
-// Suas credenciais de produção
-const ACCESS_TOKEN = 'APP_USR-5258685936517659-091600-6e36353e2b3a1fc71d70b1aaa364ca68-765341328';
+// Credenciais de produção via variáveis de ambiente (SEGURANÇA)
+const ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
+
+// Verificar se as credenciais estão configuradas
+if (!ACCESS_TOKEN) {
+  throw new Error('MERCADOPAGO_ACCESS_TOKEN não configurado nas variáveis de ambiente');
+}
 
 // Configurar cliente do Mercado Pago
 const client = new MercadoPagoConfig({
