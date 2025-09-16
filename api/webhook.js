@@ -1,4 +1,7 @@
 // Webhook Mercado Pago - Ultra Simplificado para evitar erro 502
+// Cache simples para evitar duplicatas (expira a cada 10 minutos)
+const processedPayments = new Map();
+
 export default async function handler(req, res) {
   // ✅ SEMPRE retorna 200 PRIMEIRO para evitar 502
   res.status(200);
@@ -72,6 +75,28 @@ export default async function handler(req, res) {
     }
 
     console.log(`💰 Processando pagamento ID: ${paymentId}`);
+
+    // Verificar se já processamos este pagamento (deduplicação)
+    const now = Date.now();
+    const lastProcessed = processedPayments.get(paymentId);
+
+    if (lastProcessed && (now - lastProcessed < 10 * 60 * 1000)) {
+      console.log(`⚡ Pagamento ${paymentId} já processado - ignorando duplicata`);
+      return res.json({
+        success: true,
+        message: 'Pagamento já processado (duplicata ignorada)',
+        payment_id: paymentId
+      });
+    }
+
+    // Marcar como processado
+    processedPayments.set(paymentId, now);
+
+    // Limpar cache antigo (manter só últimos 100)
+    if (processedPayments.size > 100) {
+      const entries = Array.from(processedPayments.entries());
+      entries.slice(0, -50).forEach(([key]) => processedPayments.delete(key));
+    }
 
     // Buscar dados do pagamento da API do Mercado Pago
     const ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
@@ -149,10 +174,11 @@ export default async function handler(req, res) {
       if (paymentData.status === 'approved') {
         console.log('✅ Pagamento aprovado - processando...');
 
-        // Extrair dados
+        // Extrair dados com validação
         const cpf = paymentData.payer?.identification?.number || '';
-        const telefone = paymentData.payer?.phone ?
-          `${paymentData.payer.phone.area_code}${paymentData.payer.phone.number}` : '';
+        const area_code = paymentData.payer?.phone?.area_code || '';
+        const phone_number = paymentData.payer?.phone?.number || '';
+        const telefone = (area_code && phone_number) ? `${area_code}${phone_number}` : '';
 
         const webhookData = {
           payment_id: paymentId,
@@ -163,6 +189,12 @@ export default async function handler(req, res) {
           valor: paymentData.transaction_amount || 0,
           timestamp: new Date().toISOString()
         };
+
+        console.log('📊 Dados extraídos:', {
+          cpf_length: cpf.length,
+          telefone_length: telefone.length,
+          email_exists: !!paymentData.payer?.email
+        });
 
         console.log('📤 Enviando webhook:', webhookData);
 
