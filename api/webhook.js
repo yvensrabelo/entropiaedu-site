@@ -67,6 +67,12 @@ export default async function handler(req, res) {
     // Buscar dados do pagamento da API do Mercado Pago
     const ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
 
+    console.log('🔐 Verificando ACCESS_TOKEN:', {
+      exists: !!ACCESS_TOKEN,
+      length: ACCESS_TOKEN ? ACCESS_TOKEN.length : 0,
+      prefix: ACCESS_TOKEN ? ACCESS_TOKEN.substring(0, 20) + '...' : 'N/A'
+    });
+
     if (!ACCESS_TOKEN) {
       console.error('❌ ACCESS_TOKEN não configurado');
       return res.json({
@@ -76,6 +82,8 @@ export default async function handler(req, res) {
     }
 
     try {
+      console.log(`🔍 Buscando pagamento ${paymentId} na API MP...`);
+
       const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
         method: 'GET',
         headers: {
@@ -84,11 +92,24 @@ export default async function handler(req, res) {
         }
       });
 
+      console.log(`📡 Resposta da API MP:`, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+      });
+
       if (!response.ok) {
-        throw new Error(`API MP Error: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`❌ API MP Error:`, {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+        throw new Error(`API MP Error: ${response.status} - ${errorText}`);
       }
 
       const paymentData = await response.json();
+      console.log(`✅ Dados do pagamento obtidos com sucesso:`, JSON.stringify(paymentData, null, 2));
 
       console.log('📊 Pagamento encontrado:', {
         id: paymentData.id,
