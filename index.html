@@ -297,8 +297,15 @@
     <script src="https://sdk.mercadopago.com/js/v2"></script>
 
     <script>
+        // Redirecionar para www se necessário (evita problemas de webhook 307)
+        if (window.location.hostname === 'entropiaedu.com') {
+            window.location.href = 'https://www.entropiaedu.com' + window.location.pathname + window.location.search;
+        }
+    </script>
+
+    <script>
         // Inicializar MercadoPago com sua Public Key de PRODUÇÃO
-        const mp = new MercadoPago('APP_USR-722124b2-d75f-4a39-8688-fffae5fb1054');
+        const mp = new MercadoPago('APP_USR-3970c3e6-b10c-448a-9d5a-e591c54abba6');
 
         // Variáveis globais para armazenar dados temporários
         let cursoSelecionado = null;
