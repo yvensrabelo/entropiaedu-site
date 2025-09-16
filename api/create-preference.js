@@ -84,8 +84,8 @@ export default async function handler(req, res) {
         },
         auto_return: 'approved',
 
-        // Webhook - usando versão ULTRA simplificada com www (corrigido redirecionamento 307)
-        notification_url: 'https://www.entropiaedu.com/api/webhook-ultra-simple',
+        // Webhook - usando versão DEBUG para capturar tudo
+        notification_url: 'https://www.entropiaedu.com/api/webhook-debug-capture',
 
         // Dados do comprador
         payer: {
