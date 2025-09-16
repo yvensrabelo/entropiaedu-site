@@ -12,6 +12,9 @@
     },
     "api/webhook-simple.js": {
       "maxDuration": 10
+    },
+    "api/webhook-ultra-simple.js": {
+      "maxDuration": 10
     }
   },
   "rewrites": [
