@@ -1,6 +1,8 @@
 {
   "version": 2,
   "name": "entropiaedu-site",
+  "buildCommand": "",
+  "outputDirectory": "./",
   "functions": {
     "api/create-preference.js": {
       "maxDuration": 10
