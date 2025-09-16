@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Pendente - Entropia Edu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .pending-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pending-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .pending-icon {
+            background: #ffc107;
+            color: #212529;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+        .btn-home {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="pending-container">
+        <div class="pending-card">
+            <div class="pending-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            
+            <h2 class="text-warning fw-bold mb-3">Pagamento Pendente</h2>
+            <p class="text-muted mb-4">
+                Seu pagamento está sendo processado. Você será notificado quando for confirmado.
+            </p>
+            
+            <div class="instructions">
+                <h6 class="fw-bold text-warning">Instruções importantes:</h6>
+                <div id="payment-instructions">
+                    <p><strong>PIX:</strong> Aguarde a confirmação automática (até 2 minutos)</p>
+                    <p><strong>Boleto:</strong> Pague até a data de vencimento</p>
+                    <p><strong>Cartão:</strong> Aguarde análise da operadora</p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-envelope me-2"></i>
+                Você receberá um email quando o pagamento for confirmado.
+            </div>
+            
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-shield-alt me-2"></i>
+                <strong>Não se preocupe!</strong> Seu pedido está seguro e será processado.
+            </div>
+            
+            <a href="/" class="btn-home">
+                <i class="fas fa-home me-2"></i>
+                Voltar ao Site
+            </a>
+            
+            <div class="mt-4">
+                <small class="text-muted">
+                    Dúvidas? Entre em contato: contato@entropiaedu.com
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Capturar parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentType = urlParams.get('payment_type');
+        
+        // Personalizar instruções baseado no tipo de pagamento
+        if (paymentType) {
+            const instructionsDiv = document.getElementById('payment-instructions');
+            
+            switch(paymentType) {
+                case 'pix':
+                    instructionsDiv.innerHTML = `
+                        <p><i class="fas fa-qrcode me-2"></i><strong>PIX:</strong> Aguarde a confirmação automática (até 2 minutos)</p>
+                        <p>O pagamento será confirmado automaticamente quando o PIX for processado.</p>
+                    `;
+                    break;
+                case 'ticket':
+                case 'boleto':
+                    instructionsDiv.innerHTML = `
+                        <p><i class="fas fa-barcode me-2"></i><strong>Boleto:</strong> Pague até a data de vencimento</p>
+                        <p>Após o pagamento, aguarde até 2 dias úteis para confirmação.</p>
+                    `;
+                    break;
+                case 'credit_card':
+                    instructionsDiv.innerHTML = `
+                        <p><i class="fas fa-credit-card me-2"></i><strong>Cartão de Crédito:</strong> Aguarde análise</p>
+                        <p>Seu pagamento está sendo analisado pela operadora do cartão.</p>
+                    `;
+                    break;
+                default:
+                    // Manter instruções padrão
+                    break;
+            }
+        }
+        
+        console.log('Página de pendente carregada');
+        console.log('Parâmetros:', Object.fromEntries(urlParams));
+    </script>
+</body>
+</html>

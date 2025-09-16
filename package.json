@@ -1,0 +1,28 @@
+{
+  "name": "entropiaedu-site",
+  "version": "1.0.0",
+  "description": "Site de testes para Mercado Pago - Entropia Edu",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build completed'",
+    "start": "vercel dev --listen 3000"
+  },
+  "dependencies": {
+    "mercadopago": "^2.9.0",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mercadopago",
+    "checkout",
+    "payment",
+    "vercel",
+    "entropiaedu"
+  ],
+  "author": "Entropia Edu",
+  "license": "MIT"
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entropia Edu - Testes Mercado Pago</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .feature-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .price-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn-checkout {
+            background: #009ee3;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-checkout:hover {
+            background: #0077b3;
+            transform: scale(1.05);
+            color: white;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .status-live {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-test {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Entropia Edu
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cursos">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contato">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">
+                <i class="fas fa-brain me-3"></i>
+                Aprenda com a Entropia Edu
+            </h1>
+            <p class="lead mb-4">
+                Cursos de tecnologia e inovação para transformar seu futuro
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <span class="status-badge status-live">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Sistema de Pagamento Ativo
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cursos Section -->
+    <section id="cursos" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Nossos Cursos</h2>
+                <p class="text-muted">Escolha o curso ideal para sua jornada</p>
+            </div>
+            
+            <div class="row">
+                <!-- Curso 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-code fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title text-center">Programação Básica</h5>
+                            <p class="card-text text-center text-muted">
+                                Aprenda os fundamentos da programação com JavaScript e Python
+                            </p>
+                            <div class="price-card">
+                                <h3 class="text-primary fw-bold">R$ 97,00</h3>
+                                <p class="text-muted mb-3">Acesso vitalício</p>
+                                <button class="btn btn-checkout w-100" onclick="comprarCurso('prog-basica', 'Programação Básica', 97.00)">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Comprar Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Curso 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-database fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title text-center">Banco de Dados</h5>
+                            <p class="card-text text-center text-muted">
+                                Domine MySQL, PostgreSQL e MongoDB do básico ao avançado
+                            </p>
+                            <div class="price-card">
+                                <h3 class="text-success fw-bold">R$ 147,00</h3>
+                                <p class="text-muted mb-3">Acesso vitalício</p>
+                                <button class="btn btn-checkout w-100" onclick="comprarCurso('banco-dados', 'Banco de Dados', 147.00)">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Comprar Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Curso 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-cloud fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title text-center">Cloud Computing</h5>
+                            <p class="card-text text-center text-muted">
+                                AWS, Azure e Google Cloud - Torne-se um especialista em nuvem
+                            </p>
+                            <div class="price-card">
+                                <h3 class="text-warning fw-bold">R$ 197,00</h3>
+                                <p class="text-muted mb-3">Acesso vitalício</p>
+                                <button class="btn btn-checkout w-100" onclick="comprarCurso('cloud-computing', 'Cloud Computing', 197.00)">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Comprar Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teste Section -->
+    <section class="test-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Área de Testes</h2>
+                <p class="text-muted">Teste a integração do Mercado Pago</p>
+                <span class="status-badge status-test">
+                    <i class="fas fa-flask me-1"></i>
+                    Ambiente de Testes
+                </span>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Produto de Teste</h5>
+                            <p class="card-text">Use para testar o fluxo de pagamento</p>
+                            <h4 class="text-primary">R$ 0,01</h4>
+                            <button class="btn btn-outline-primary" onclick="comprarCurso('teste', 'Produto de Teste', 0.01)">
+                                <i class="fas fa-test-tube me-2"></i>
+                                Testar Pagamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Entropia Edu. Sistema de pagamento integrado com Mercado Pago.</p>
+            <p class="text-muted">
+                <i class="fas fa-shield-alt me-1"></i>
+                Pagamentos seguros e criptografados
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    
+    <script>
+        // Inicializar MercadoPago com sua Public Key de PRODUÇÃO
+        const mp = new MercadoPago('APP_USR-722124b2-d75f-4a39-8688-fffae5fb1054');
+
+        async function comprarCurso(id, titulo, preco) {
+            try {
+                // Mostrar loading
+                const button = event.target;
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processando...';
+                button.disabled = true;
+
+                console.log('Criando preferência para:', { id, titulo, preco });
+
+                // Criar preferência
+                const response = await fetch('/api/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        title: titulo,
+                        price: preco,
+                        description: `Curso ${titulo} - Entropia Edu`,
+                        buyer_email: 'cliente@entropiaedu.com'
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Resposta da API:', data);
+
+                if (data.success) {
+                    // Abrir checkout do Mercado Pago
+                    const checkout = mp.checkout({
+                        preference: {
+                            id: data.preference_id
+                        },
+                        autoOpen: true
+                    });
+                } else {
+                    alert('Erro ao criar preferência: ' + data.error);
+                }
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao processar compra: ' + error.message);
+            } finally {
+                // Restaurar botão
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+            }
+        }
+
+        // Log para debug
+        console.log('Site Entropia Edu carregado');
+        console.log('MercadoPago SDK inicializado');
+    </script>
+</body>
+</html>

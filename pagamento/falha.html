@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Rejeitado - Entropia Edu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .error-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .error-icon {
+            background: #dc3545;
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+        .btn-retry {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+        .btn-home {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-card">
+            <div class="error-icon">
+                <i class="fas fa-times"></i>
+            </div>
+            
+            <h2 class="text-danger fw-bold mb-3">Pagamento Rejeitado</h2>
+            <p class="text-muted mb-4">
+                Não foi possível processar seu pagamento. Verifique os dados do cartão e tente novamente.
+            </p>
+            
+            <div class="alert alert-warning" role="alert">
+                <h6 class="fw-bold">Possíveis motivos:</h6>
+                <ul class="text-start mb-0">
+                    <li>Dados do cartão incorretos</li>
+                    <li>Saldo ou limite insuficiente</li>
+                    <li>Cartão vencido ou bloqueado</li>
+                    <li>Problemas com a operadora</li>
+                </ul>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-lightbulb me-2"></i>
+                <strong>Dica:</strong> Tente usar outro cartão ou método de pagamento.
+            </div>
+            
+            <a href="/" class="btn-retry">
+                <i class="fas fa-redo me-2"></i>
+                Tentar Novamente
+            </a>
+            
+            <a href="/" class="btn-home">
+                <i class="fas fa-home me-2"></i>
+                Voltar ao Site
+            </a>
+            
+            <div class="mt-4">
+                <small class="text-muted">
+                    Problemas? Entre em contato: contato@entropiaedu.com
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Capturar parâmetros da URL para debug
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log('Página de falha carregada');
+        console.log('Parâmetros:', Object.fromEntries(urlParams));
+        
+        // Mostrar ID do pagamento se disponível
+        const paymentId = urlParams.get('payment_id');
+        if (paymentId) {
+            console.log('Payment ID:', paymentId);
+        }
+    </script>
+</body>
+</html>
