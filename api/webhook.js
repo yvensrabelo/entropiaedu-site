@@ -7,9 +7,18 @@ export default async function handler(req, res) {
   try {
     console.log('🔔 Webhook recebido:', new Date().toISOString());
     console.log('Method:', req.method);
-    console.log('Headers:', JSON.stringify(req.headers, null, 2));
     console.log('Query:', JSON.stringify(req.query, null, 2));
     console.log('Body:', JSON.stringify(req.body, null, 2));
+
+    // Log de TODOS os IDs possíveis
+    console.log('🔍 TODOS OS IDs POSSÍVEIS:', {
+      'req.body.data.id': req.body?.data?.id,
+      'req.body.id': req.body?.id,
+      'req.query.id': req.query?.id,
+      'req.query["data.id"]': req.query?.['data.id'],
+      'headers.x-request-id': req.headers?.['x-request-id'],
+      'body_full': req.body
+    });
 
     // Verificar se é POST
     if (req.method !== 'POST') {
