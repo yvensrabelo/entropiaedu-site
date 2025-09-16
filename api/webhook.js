@@ -105,7 +105,25 @@ export default async function handler(req, res) {
           statusText: response.statusText,
           body: errorText
         });
-        throw new Error(`API MP Error: ${response.status} - ${errorText}`);
+
+        // Se pagamento não existe (404), retornar sucesso para evitar reenvios
+        if (response.status === 404) {
+          console.log(`⚠️ Pagamento ${paymentId} não encontrado (404) - pode ser pagamento de teste`);
+          return res.json({
+            success: true,
+            message: 'Pagamento não encontrado (possivelmente teste)',
+            payment_id: paymentId
+          });
+        }
+
+        // Outros erros também não devem falhar o webhook
+        console.log(`⚠️ Erro ${response.status} ao buscar pagamento - retornando sucesso`);
+        return res.json({
+          success: true,
+          message: `Erro ${response.status} na API MP - webhook processado`,
+          payment_id: paymentId,
+          error: errorText
+        });
       }
 
       const paymentData = await response.json();
