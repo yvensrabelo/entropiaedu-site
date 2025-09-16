@@ -76,16 +76,16 @@ export default async function handler(req, res) {
           }
         ],
 
-        // URLs de retorno para entropiaedu.com
+        // URLs de retorno - usando domínio Vercel temporariamente
         back_urls: {
-          success: 'https://entropiaedu.com/pagamento/sucesso',
-          failure: 'https://entropiaedu.com/pagamento/falha',
-          pending: 'https://entropiaedu.com/pagamento/pendente'
+          success: 'https://entropiaedu-site.vercel.app/pagamento/sucesso',
+          failure: 'https://entropiaedu-site.vercel.app/pagamento/falha',
+          pending: 'https://entropiaedu-site.vercel.app/pagamento/pendente'
         },
         auto_return: 'approved',
 
-        // Webhook
-        notification_url: 'https://entropiaedu.com/api/webhook',
+        // Webhook - usando domínio Vercel temporariamente
+        notification_url: 'https://entropiaedu-site.vercel.app/api/webhook',
 
         // Dados do comprador
         payer: {
