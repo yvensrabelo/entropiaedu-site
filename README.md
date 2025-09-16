@@ -1,154 +1,144 @@
-# 🎓 Entropia Edu - Site de Testes Mercado Pago
+# Plataforma de Pagamentos com Mercado Pago
 
-Site básico para testar integração do Mercado Pago Checkout Pro usando **entropiaedu.com**
+## 🚀 Descrição
+Sistema completo de e-commerce com integração ao Mercado Pago Checkout Pro, incluindo:
+- Coleta de dados do cliente (CPF, WhatsApp, Email)
+- Processamento de pagamentos via PIX, cartão e boleto
+- Sistema de webhooks para confirmação de pagamento
+- Páginas de retorno (sucesso/falha/pendente)
 
-## 🚀 Deploy na Vercel
+## 📋 Pré-requisitos
+- Node.js 18+
+- Conta no Mercado Pago
+- Conta na Vercel (para deploy)
 
-### 1. **Preparar Repositório GitHub**
+## 🔧 Instalação
 
+### 1. Clone o repositório
 ```bash
-# Navegar para a pasta do site
-cd entropiaedu-site
-
-# Inicializar git
-git init
-
-# Adicionar arquivos
-git add .
-
-# Primeiro commit
-git commit -m "🎉 Site inicial Entropia Edu com Mercado Pago"
-
-# Adicionar repositório remoto (substitua por seu repo)
-git remote add origin https://github.com/SEU_USUARIO/entropiaedu-site.git
-
-# Push para GitHub
-git push -u origin main
+git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+cd SEU_REPOSITORIO
 ```
 
-### 2. **Conectar com Vercel**
-
-1. Acesse [vercel.com](https://vercel.com)
-2. Conecte sua conta GitHub
-3. Clique em "Import Project"
-4. Selecione o repositório `entropiaedu-site`
-5. Configure as variáveis de ambiente
-
-### 3. **Configurar Domínio Personalizado**
-
-No painel da Vercel:
-1. Vá em **Settings > Domains**
-2. Adicione `entropiaedu.com`
-3. Configure DNS na HostGator:
-   ```
-   Tipo: CNAME
-   Nome: www
-   Valor: cname.vercel-dns.com
-   
-   Tipo: A
-   Nome: @
-   Valor: 76.76.19.61
-   ```
-
-### 4. **Configurar Variáveis de Ambiente**
-
-No painel da Vercel, vá em **Settings > Environment Variables**:
-
-```
-MERCADOPAGO_WEBHOOK_SECRET = sua_secret_key_do_painel_mp
+### 2. Instale as dependências
+```bash
+npm install
 ```
 
-### 5. **Configurar Webhook no Mercado Pago**
+### 3. Configure as variáveis de ambiente
 
-1. Acesse: https://www.mercadopago.com.br/developers/panel/app
-2. Selecione sua aplicação
-3. Vá em **Webhooks**
-4. Configure:
-   - **URL**: `https://entropiaedu.com/api/webhook`
-   - **Eventos**: `Payments`
-5. Copie a **Secret Key** e adicione na Vercel
+#### Na Vercel:
+1. Acesse as configurações do projeto
+2. Vá em Settings > Environment Variables
+3. Adicione:
+   - `MERCADOPAGO_ACCESS_TOKEN`: Seu token de produção do Mercado Pago
 
-## 🛠 Estrutura do Projeto
+#### Localmente:
+1. Copie o arquivo `.env.example` para `.env.local`
+2. Preencha com suas credenciais
+
+## 🏗️ Estrutura do Projeto
 
 ```
-entropiaedu-site/
+/
 ├── api/
-│   ├── create-preference.js    # API para criar preferências
-│   └── webhook.js              # Webhook para notificações
+│   ├── create-preference.js    # Cria preferências de pagamento
+│   ├── webhook.js              # Recebe notificações do MP
+│   ├── debug-mp.js            # Debug do token
+│   └── test-payment.js        # Testa pagamentos específicos
 ├── pagamento/
 │   ├── sucesso.html           # Página de sucesso
-│   ├── falha.html             # Página de falha
-│   └── pendente.html          # Página de pendente
+│   ├── falha.html            # Página de falha
+│   └── pendente.html         # Página de pendente
 ├── index.html                 # Página principal
-├── package.json              # Dependências
-├── vercel.json               # Configuração Vercel
-└── README.md                 # Este arquivo
+└── vercel.json               # Configuração da Vercel
 ```
 
-## 💳 Credenciais Configuradas
+## 🔑 Obter Credenciais do Mercado Pago
 
-- **Public Key**: `APP_USR-722124b2-d75f-4a39-8688-fffae5fb1054`
-- **Access Token**: Configurado no código
-- **Environment**: Produção
+1. Acesse [Mercado Pago Developers](https://www.mercadopago.com.br/developers)
+2. Crie uma aplicação
+3. Copie o **Access Token de Produção**
+4. Configure no arquivo `.env` ou nas variáveis da Vercel
 
-## 🧪 Como Testar
+## 🌐 Deploy na Vercel
 
-### **Teste Local:**
+### Via CLI:
 ```bash
-# Instalar Vercel CLI
-npm install -g vercel
-
-# Instalar dependências
-npm install
-
-# Executar localmente
-vercel dev
+npm i -g vercel
+vercel --prod
 ```
 
-### **Teste em Produção:**
-1. Acesse `https://entropiaedu.com`
-2. Clique em "Comprar Agora" em qualquer curso
-3. Use cartões de teste:
-   - **Aprovado**: `5031433215406351` (nome: APRO)
-   - **Rejeitado**: `5031433215406351` (nome: FUND)
+### Via GitHub:
+1. Faça push do código para o GitHub
+2. Conecte o repositório na Vercel
+3. Configure as variáveis de ambiente
+4. Deploy automático a cada push
 
-## 🔧 URLs Configuradas
+## 🔧 Configurações Importantes
 
-- **Site**: `https://entropiaedu.com`
-- **Sucesso**: `https://entropiaedu.com/pagamento/sucesso`
-- **Falha**: `https://entropiaedu.com/pagamento/falha`
-- **Pendente**: `https://entropiaedu.com/pagamento/pendente`
-- **Webhook**: `https://entropiaedu.com/api/webhook`
+### URLs de Retorno
+Edite em `api/create-preference.js`:
+```javascript
+back_urls: {
+  success: 'https://SEU_DOMINIO/pagamento/sucesso',
+  failure: 'https://SEU_DOMINIO/pagamento/falha',
+  pending: 'https://SEU_DOMINIO/pagamento/pendente'
+}
+```
 
-## 📋 Checklist de Deploy
+### Webhook Externo
+Se você usa N8N ou outro sistema, configure em `api/webhook.js`:
+```javascript
+const webhookResponse = await fetch('https://SEU_WEBHOOK_URL', {
+  // ...
+});
+```
 
-- [ ] Repositório criado no GitHub
-- [ ] Projeto importado na Vercel
-- [ ] Domínio `entropiaedu.com` configurado
-- [ ] DNS configurado na HostGator
-- [ ] Variável `MERCADOPAGO_WEBHOOK_SECRET` configurada
-- [ ] Webhook configurado no painel Mercado Pago
-- [ ] Teste de pagamento realizado
-- [ ] SSL certificado ativo
+## 📝 Personalização
 
-## 🆘 Troubleshooting
+### Produtos/Cursos
+Edite em `index.html` para adicionar/modificar produtos:
+```javascript
+const cursos = [
+  { id: 'novo-curso', titulo: 'Novo Curso', preco: 50.00 }
+];
+```
 
-### **Erro 404 nas APIs:**
-- Verifique se `vercel.json` está configurado
-- Confirme se as funções estão na pasta `api/`
+### Estilos
+O projeto usa Bootstrap 5. Personalize em `index.html`.
 
-### **Webhook não funciona:**
-- Verifique se a Secret Key está configurada
-- Confirme se a URL está correta no painel MP
-- Verifique logs na Vercel
+## 🧪 Testes
 
-### **Domínio não funciona:**
-- Aguarde propagação DNS (até 24h)
-- Verifique configuração na HostGator
-- Confirme configuração na Vercel
+### Testar Token:
+```
+https://SEU_DOMINIO/api/debug-mp
+```
 
-## 📞 Suporte
+### Testar Pagamento Específico:
+```
+https://SEU_DOMINIO/api/test-payment?id=PAYMENT_ID
+```
 
-- **Email**: contato@entropiaedu.com
-- **Documentação MP**: https://www.mercadopago.com.br/developers/
-- **Vercel Docs**: https://vercel.com/docs
+## 🐛 Debug
+
+### Webhook com erro 502:
+- Verifique se o ACCESS_TOKEN está correto
+- Confirme que o domínio está propagado
+- Use o endpoint `/api/webhook-debug` temporariamente
+
+### Pagamento não atualiza:
+- Verifique as URLs de retorno
+- Confirme que o webhook está sendo recebido
+- Teste com `/api/test-payment?id=XXX`
+
+## 📚 Documentação Útil
+- [Mercado Pago Checkout Pro](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/landing)
+- [Webhooks do Mercado Pago](https://www.mercadopago.com.br/developers/pt/docs/your-integrations/notifications/webhooks)
+- [Vercel Serverless Functions](https://vercel.com/docs/functions)
+
+## 📄 Licença
+MIT
+
+## 🤝 Suporte
+Para dúvidas sobre a integração, consulte a [documentação do Mercado Pago](https://www.mercadopago.com.br/developers).
